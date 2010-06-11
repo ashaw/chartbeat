@@ -1,6 +1,15 @@
 = chartbeat
 
-Description goes here.
+A Ruby wrapper for the Chartbeat API
+
+== Install
+
+`gem install chartbeat`
+
+== Usage
+
+    c = Chartbeat.new :apikey => yourkey, :host => 'yourdomain.com'    
+
 
 == Note on Patches/Pull Requests
  
