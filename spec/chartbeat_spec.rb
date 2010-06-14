@@ -36,4 +36,18 @@ describe "Chartbeat" do
 
   it "should get and parse the 'toppages' endpoint"
 
+  it "should get and parse the 'alerts' endpoint"
+
+  it "should get and parse the 'snapshots' endpoint"
+
+  it "should get and parse the 'stats' endpoint"
+
+  it "should get and parse the 'data_series' endpoint"
+
+  it "should get and parse the 'day_data_series' endpoint"
+
+  it "should get and parse the 'histogram' endpoint"
+
+  it "should get and parse the 'summary' endpoint"
+
 end

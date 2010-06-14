@@ -103,24 +103,22 @@ class Chartbeat
   # other calls
   #
   
-  # NOT WORKING ("invalid json string")
   def histogram(opts = {})
     q = { :keys => 'n',
           :breaks => 'n',
           :path => nil
         }.merge!(opts)
   
-    self.class.get('/histogram', :query => q)
+    self.class.get('/histogram/', :query => q)
   end
 
-  # NOT WORKING ("invalid json string")  
   def summary(opts = {})
     q = { :keys => 'n',
           :types => 'n',
           :path => nil
         }.merge!(opts)
     
-    self.class.get('/summary', :query => q)
+    self.class.get('/summary/', :query => q)
   end
   
 end
