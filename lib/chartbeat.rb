@@ -6,7 +6,7 @@ class Chartbeat
   base_uri 'chartbeat.com/api'   
   format :json
   
-  # Chartbeat.new :apikey => 'yourkey', :host => 'yourdomain.com'
+  # c = Chartbeat.new :apikey => 'yourkey', :host => 'yourdomain.com'
   def initialize(opts = {})
     self.class.default_params :apikey => opts[:apikey]
     self.class.default_params :host => opts[:host]
@@ -16,8 +16,12 @@ class Chartbeat
   # real-time calls
   #
   
-  def pages(path = nil)
-    self.class.get("/pages/", :query => {:path => path})
+  # c.pages :path => '/'
+  def pages(opts = {})
+    q = { :path => nil
+        }.merge!(opts)
+        
+    self.class.get("/pages/", :query => q)
   end
   
   def pathsummary(opts = {})
@@ -36,69 +40,87 @@ class Chartbeat
     self.class.get("/recent/", :query => q)
   end
   
-  def summize(path = nil)
-    self.class.get("/summize/", :query => {:path => path})
+  def summize(opts = {})
+    q = { :path => '/'
+        }.merge!(opts)
+        
+    self.class.get("/summize/", :query => q)
   end
   
-  def toppages(limit = nil)
-    self.class.get("/toppages/", :query => {:limit => limit})
+  def toppages(opts = {})
+    q = { :limit => nil
+        }.merge!(opts)
+        
+    self.class.get("/toppages/", :query => q)
   end
   
   #
   # historical calls
   #
   
+  YESTERDAY = Time.now.to_i - 86400
+  
   #defaults to yesterday
-  def alerts(since = (Time.now.to_i - 86400))
-    self.class.get("/dashapi/alerts/", :query => {:since => since})
+  def alerts(opts = {})
+    q = { :since => YESTERDAY 
+        }.merge!(opts)
+        
+    self.class.get("/dashapi/alerts/", :query => q)
   end
   
-  def snapshots(timestamp = Time.now.to_i)
-  
+  def snapshots(opts = {})
+    q = { :timestamp => YESTERDAY
+        }.merge!(opts)
+        
+    self.class.get("/dashapi/snapshots/", :query => q)
   end
   
   def stats
     self.class.get("/dashapi/stats/")
   end
   
+  #NOT WORKING, "We're most likely pushing out some new changes."
   def data_series(opts = {})
-    { :timestamp => Time.now.to_i - 86400,
-      :days => 1,
-      :minutes => 20,
-      :type => 'path',
-      :val => nil
-    }.merge!(opts)
+    q = { :timestamp => YESTERDAY,
+          :days => 1,
+          :minutes => 20,
+          :type => 'path',
+          :val => nil
+        }.merge!(opts)
     
-    self.class.get("/dashapi/data_series/", :query => {}.merge!(opts))
+    self.class.get("/dashapi/data_series/", :query => q)
   end
   
   def day_data_series(opts = {})
-    { :timestamp => Time.now.to_i - 86400,
-      :type => 'paths'
-    }.merge!(opts)
+    q = { :timestamp => YESTERDAY,
+          :type => 'paths'
+        }.merge!(opts)
    
-   self.class.get("/dashapi/day_data_series/", :query => {}.merge!(opts)) 
+   self.class.get("/dashapi/day_data_series/", :query => q) 
   end
   
   #
   # other calls
   #
   
+  # NOT WORKING ("invalid json string")
   def histogram(opts = {})
-    { :keys => '',
-      :breaks => '',
-      :path => nil
-    }.merge!(opts)
+    q = { :keys => 'n',
+          :breaks => 'n',
+          :path => nil
+        }.merge!(opts)
   
+    self.class.get('/histogram', :query => q)
   end
-  
+
+  # NOT WORKING ("invalid json string")  
   def summary(opts = {})
-    { :keys => 'n',
-      :types => 'n',
-      :path => nil
-    }.merge!(opts)
+    q = { :keys => 'n',
+          :types => 'n',
+          :path => nil
+        }.merge!(opts)
     
-    self.class.get('/summary', :query => {}.merge!(opts))
+    self.class.get('/summary', :query => q)
   end
   
 end
