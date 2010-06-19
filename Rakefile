@@ -12,7 +12,7 @@ begin
     gem.authors = ["Al Shaw"]
     gem.add_dependency "httparty"
     gem.add_development_dependency "rspec", ">= 1.2.9"
-    gem.add_developement_dependency "fakeweb"
+    gem.add_development_dependency "fakeweb"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
