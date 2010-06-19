@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
      "README.md",
      "Rakefile",
      "VERSION",
+     "chartbeat.gemspec",
      "lib/chartbeat.rb",
      "spec/chartbeat_spec.rb",
      "spec/fixtures/day_data_series.json",
