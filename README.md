@@ -23,8 +23,8 @@ historical calls and options
     c.alerts           :since => 1276980619
     c.snapshots        :timestamp => 1276980619
     c.stats
-    c.data_series
-    c.day_data_series
+    c.data_series      #not working right now
+    c.day_data_series  :timestamp => 1276980619, :type => 'paths'
     
 other calls and options
 
