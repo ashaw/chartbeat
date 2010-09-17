@@ -10,7 +10,8 @@ begin
     gem.email = "almshaw@gmail.com"
     gem.homepage = "http://github.com/ashaw/chartbeat"
     gem.authors = ["Al Shaw"]
-    gem.add_dependency "httparty"
+    gem.add_dependency "rest-client"
+    gem.add_dependency "crack"
     gem.add_development_dependency "rspec", ">= 1.2.9"
     gem.add_development_dependency "fakeweb"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
