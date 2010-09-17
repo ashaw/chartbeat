@@ -8,11 +8,11 @@ class Chartbeat
   DASHAPI_METHODS   = [:alerts, :snapshots, :stats, :data_series, :day_data_series]
   DEFAULT_ARG_VALS  = {:path => '/', :keys => 'n', :types => 'n', :since => YESTERDAY, 
                        :timestamp => YESTERDAY, :days => 1, :minutes => 20, :type => 'path', 
-                       :breaks => 'n'}
+                       :breaks => 'n', :limit => 10}
 
   # c = Chartbeat.new :apikey => 'yourkey', :host => 'yourdomain.com'
   def initialize(opts = {})
-    raise RuntimeError, "You must provide an API key or host" unless opts[:apikey] && opts[:host]
+    raise RuntimeError, "You must provide an API key and host" unless opts[:apikey] && opts[:host]
     @apikey = opts[:apikey]
     @host = opts[:host]
   end

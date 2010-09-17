@@ -16,7 +16,7 @@ def fixture_file(filename)
 end
 
 def register_uri(uri, method)
-  query_string = "?breaks=n&type=path&types=n&path=%2F&since=#{Chartbeat::YESTERDAY}&apikey=fake_key&timestamp=#{Chartbeat::YESTERDAY}&days=1&keys=n&minutes=20&host=fakehost.com"
+  query_string = "?breaks=n&type=path&types=n&path=%2F&since=#{Chartbeat::YESTERDAY}&limit=10&apikey=fake_key&timestamp=#{Chartbeat::YESTERDAY}&days=1&keys=n&minutes=20&host=fakehost.com"
   FakeWeb.register_uri(:get, "#{uri}#{query_string}", :body => fixture_file("#{method}.json"))
 end
 
