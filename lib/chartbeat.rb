@@ -1,124 +1,35 @@
-require 'httparty'
+require 'crack'
+require 'rest_client'
 
 class Chartbeat
-  include HTTParty
-  
-  base_uri 'chartbeat.com/api'   
-  format :json
-  
+  YESTERDAY         = Time.now.to_i - 86400
+  BASE_URI          = 'chartbeat.com/api'
+  METHODS           = [:pages, :pathsummary, :recent, :summize, :toppages, :histogram, :summary]
+  DASHAPI_METHODS   = [:alerts, :snapshots, :stats, :data_series, :day_data_series]
+  DEFAULT_ARG_VALS  = {:path => '/', :keys => 'n', :types => 'n', :since => YESTERDAY, 
+                       :timestamp => YESTERDAY, :days => 1, :minutes => 20, :type => 'path', 
+                       :breaks => 'n'}
+
   # c = Chartbeat.new :apikey => 'yourkey', :host => 'yourdomain.com'
   def initialize(opts = {})
-    self.class.default_params :apikey => opts[:apikey]
-    self.class.default_params :host => opts[:host]
+    raise RuntimeError, "You must provide an API key or host" unless opts[:apikey] && opts[:host]
+    @apikey = opts[:apikey]
+    @host = opts[:host]
   end
-  
-  #
-  # real-time calls
-  #
-  
-  # c.pages :path => '/'
-  def pages(opts = {})
-    q = { :path => nil
-        }.merge!(opts)
-        
-    self.class.get("/pages/", :query => q)
-  end
-  
-  def pathsummary(opts = {})
-    q = { :keys => 'n',
-          :types => 'n'
-        }.merge!(opts)
     
-    self.class.get("/pathsummary/", :query => q)
-  end
-  
-  def recent(opts = {})
-    q = { :limit => nil,
-          :path => '/' 
-         }.merge!(opts)
+  def method_missing(m, *args)
+    super unless METHODS.include?(m) || DASHAPI_METHODS.include?(m)
     
-    self.class.get("/recent/", :query => q)
+    query = *args
+    query_to_perform = {:apikey => @apikey, :host => @host}
+    DEFAULT_ARG_VALS.each do |k,v|
+      if query && query[k]
+        v = query[k]
+      end
+      query_to_perform[k] = v
+    end
+    prefix = DASHAPI_METHODS.include?(m) ? '/dashapi' : ''
+    data = Crack::JSON.parse(RestClient.get("http://" + BASE_URI + prefix + '/' + m.to_s + '/', :params => query_to_perform))
   end
-  
-  def summize(opts = {})
-    q = { :path => '/'
-        }.merge!(opts)
-        
-    self.class.get("/summize/", :query => q)
-  end
-  
-  def toppages(opts = {})
-    q = { :limit => nil
-        }.merge!(opts)
-        
-    self.class.get("/toppages/", :query => q)
-  end
-  
-  #
-  # historical calls
-  #
-  
-  YESTERDAY = Time.now.to_i - 86400
-  
-  #defaults to yesterday
-  def alerts(opts = {})
-    q = { :since => YESTERDAY 
-        }.merge!(opts)
-        
-    self.class.get("/dashapi/alerts/", :query => q)
-  end
-  
-  def snapshots(opts = {})
-    q = { :timestamp => YESTERDAY
-        }.merge!(opts)
-        
-    self.class.get("/dashapi/snapshots/", :query => q)
-  end
-  
-  def stats
-    self.class.get("/dashapi/stats/")
-  end
-  
-  #NOT WORKING, "We're most likely pushing out some new changes."
-  def data_series(opts = {})
-    q = { :timestamp => YESTERDAY,
-          :days => 1,
-          :minutes => 20,
-          :type => 'path',
-          :val => nil
-        }.merge!(opts)
     
-    self.class.get("/dashapi/data_series/", :query => q)
-  end
-  
-  def day_data_series(opts = {})
-    q = { :timestamp => YESTERDAY,
-          :type => 'paths'
-        }.merge!(opts)
-   
-   self.class.get("/dashapi/day_data_series/", :query => q) 
-  end
-  
-  #
-  # other calls
-  #
-  
-  def histogram(opts = {})
-    q = { :keys => 'n',
-          :breaks => 'n',
-          :path => nil
-        }.merge!(opts)
-  
-    self.class.get('/histogram/', :query => q)
-  end
-
-  def summary(opts = {})
-    q = { :keys => 'n',
-          :types => 'n',
-          :path => nil
-        }.merge!(opts)
-    
-    self.class.get('/summary/', :query => q)
-  end
-  
 end

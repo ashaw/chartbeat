@@ -10,7 +10,7 @@ describe "Chartbeat" do
   end
   
   it "should get and parse the 'pages' endpoint" do
-    register_uri("http://chartbeat.com/api/pages/?apikey=#{KEY}&host=#{HOST}&path=", "pages")
+    register_uri("http://chartbeat.com/api/pages/", "pages")
     
     pages = @c.pages
     titles = pages['titles'].to_a
@@ -18,21 +18,21 @@ describe "Chartbeat" do
   end
   
   it "should get and parse the 'pathsummary' endpoint" do
-    register_uri("http://chartbeat.com/api/pathsummary/?apikey=#{KEY}&host=#{HOST}&keys=n&types=n", "pathsummary")
+    register_uri("http://chartbeat.com/api/pathsummary/", "pathsummary")
     
     pathsummary = @c.pathsummary.to_a
     pathsummary[0][0].should eql('/2010/06/the_gaza_flotilla_raid_what_do_we_know.php')
   end
   
   it "should get and parse the 'recent' endpoint" do
-    register_uri("http://chartbeat.com/api/recent/?apikey=#{KEY}&host=#{HOST}&path=%2F&limit=", "recent")
+    register_uri("http://chartbeat.com/api/recent/", "recent")
     
     recent = @c.recent
     recent[0]['i'].should eql('Talking Points Memo | Breaking News and Analysis')
   end
   
   it "should get and parse the 'summize' endpoint" do
-    register_uri("http://chartbeat.com/api/summize/?apikey=#{KEY}&host=#{HOST}&path=%2F", "summize")
+    register_uri("http://chartbeat.com/api/summize/", "summize")
     
     summize = @c.summize
     summize['new'].should eql(40)
@@ -40,7 +40,7 @@ describe "Chartbeat" do
   end
 
   it "should get and parse the 'toppages' endpoint" do
-    register_uri("http://chartbeat.com/api/toppages/?apikey=#{KEY}&host=#{HOST}&limit=", "toppages")
+    register_uri("http://chartbeat.com/api/toppages/", "toppages")
     
     toppages = @c.toppages
     toppages[0]['i'].should eql('Talking Points Memo | Breaking News and Analysis')
@@ -51,7 +51,7 @@ describe "Chartbeat" do
   it "should get and parse the 'alerts' endpoint"
 
   it "should get and parse the 'snapshots' endpoint" do
-    register_uri("http://chartbeat.com/api/dashapi/snapshots/?apikey=#{KEY}&host=#{HOST}&timestamp=#{Chartbeat::YESTERDAY}","snapshots")
+    register_uri("http://chartbeat.com/api/dashapi/snapshots/","snapshots")
     
     snapshots = @c.snapshots.to_a
     
@@ -65,7 +65,7 @@ describe "Chartbeat" do
   end
 
   it "should get and parse the 'stats' endpoint" do
-    register_uri("http://chartbeat.com/api/dashapi/stats/?apikey=#{KEY}&host=#{HOST}","stats")
+    register_uri("http://chartbeat.com/api/dashapi/stats/","stats")
     
     stats = @c.stats
     
@@ -77,21 +77,21 @@ describe "Chartbeat" do
   it "should get and parse the 'data_series' endpoint"
 
   it "should get and parse the 'day_data_series' endpoint" do
-    register_uri("http://chartbeat.com/api/dashapi/day_data_series/?apikey=#{KEY}&host=#{HOST}&type=paths&timestamp=#{Chartbeat::YESTERDAY}","day_data_series")
+    register_uri("http://chartbeat.com/api/dashapi/day_data_series/","day_data_series")
     
     day_data_series = @c.day_data_series.to_a
     day_data_series[0][0].should eql("/archives/2010/06/painfully_funny php")
   end
 
   it "should get and parse the 'histogram' endpoint" do
-    register_uri("http://chartbeat.com/api/histogram/?apikey=#{KEY}&host=#{HOST}&keys=n&breaks=n&path=","histogram")
+    register_uri("http://chartbeat.com/api/histogram/","histogram")
     
     histogram = @c.histogram
     histogram['n']['data']['sumOfSquares'].should eql(91.0)
   end
 
   it "should get and parse the 'summary' endpoint" do
-    register_uri("http://chartbeat.com/api/summary/?apikey=#{KEY}&host=#{HOST}&keys=n&types=n&path=","summary")
+    register_uri("http://chartbeat.com/api/summary/","summary")
 
     summary = @c.summary
     summary['n']['data']['sumOfSquares'].should eql(99.0)

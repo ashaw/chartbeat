@@ -1,5 +1,6 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+require 'rubygems'
 require 'chartbeat'
 require 'fakeweb'
 require 'spec'
@@ -15,7 +16,8 @@ def fixture_file(filename)
 end
 
 def register_uri(uri, method)
-  FakeWeb.register_uri(:get, uri, :body => fixture_file("#{method}.json"))
+  query_string = "?breaks=n&type=path&types=n&path=%2F&since=#{Chartbeat::YESTERDAY}&apikey=fake_key&timestamp=#{Chartbeat::YESTERDAY}&days=1&keys=n&minutes=20&host=fakehost.com"
+  FakeWeb.register_uri(:get, "#{uri}#{query_string}", :body => fixture_file("#{method}.json"))
 end
 
 Spec::Runner.configure do |config| 
