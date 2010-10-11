@@ -4,12 +4,13 @@ require 'rest_client'
 class Chartbeat
   YESTERDAY         = Time.now.to_i - 86400
   BASE_URI          = 'chartbeat.com/api'
-  METHODS           = [:pages, :pathsummary, :recent, :summize, :toppages, :histogram, :summary]
+  METHODS           = [:pages, :pathsummary, :recent, :summize, :quickstats, :toppages, :histogram, :summary]
   DASHAPI_METHODS   = [:alerts, :snapshots, :stats, :data_series, :day_data_series]
   DEFAULT_ARG_VALS  = {:path => '/', :keys => 'n', :types => 'n', :since => YESTERDAY, 
                        :timestamp => YESTERDAY, :days => 1, :minutes => 20, :type => 'path', 
                        :breaks => 'n', :limit => 10}
-
+  DEPRECATED_METHODS= [:summize]
+  
   # c = Chartbeat.new :apikey => 'yourkey', :host => 'yourdomain.com'
   def initialize(opts = {})
     raise RuntimeError, "You must provide an API key and host" unless opts[:apikey] && opts[:host]
@@ -19,7 +20,11 @@ class Chartbeat
     
   def method_missing(m, *args)
     super unless METHODS.include?(m) || DASHAPI_METHODS.include?(m)
-    
+
+    if DEPRECATED_METHODS.include?(m)
+      warn "#{m} is a deprecated method. Use with caution!"
+    end
+
     query = *args
     query_to_perform = {:apikey => @apikey, :host => @host}
     DEFAULT_ARG_VALS.each do |k,v|

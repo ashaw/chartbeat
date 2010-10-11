@@ -15,7 +15,7 @@ real-time calls and options
     c.pages            :path => '/'
     c.pathsummary      :keys => 'n', :types => 'n'
     c.recent           :limit => 2, :path => '/'
-    c.summize          :path => '/'
+    c.quickstats       :path => '/'
     c.toppages         :limit => 10
     
 historical calls and options
@@ -30,6 +30,10 @@ other calls and options
 
     c.histogram        :keys => 'n', :breaks => 'n', :path => '/'
     c.summary          :keys => 'n', :types => 'n', :path => '/'
+
+Deprecated methods
+
+    c.summize #use quickstats instead
     
 ## Notes
 
