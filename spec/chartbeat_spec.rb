@@ -39,6 +39,14 @@ describe "Chartbeat" do
     summize['idle'].should eql(382)
   end
 
+  it "should get and parse the 'quickstats' endpoint" do
+    register_uri("http://chartbeat.com/api/quickstats/", "quickstats")
+    
+    quickstats = @c.quickstats
+    quickstats['links'].should eql(730)
+  end
+
+
   it "should get and parse the 'toppages' endpoint" do
     register_uri("http://chartbeat.com/api/toppages/", "toppages")
     
