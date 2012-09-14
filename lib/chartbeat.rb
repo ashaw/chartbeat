@@ -3,7 +3,7 @@ require 'rest_client'
 
 class Chartbeat
   YESTERDAY         = Time.now.to_i - 86400
-  BASE_URI          = 'chartbeat.com/api'
+  BASE_URI          = 'api.chartbeat.com'
   METHODS           = [:pages, :pathsummary, :recent, :summize, :quickstats, :toppages, :histogram, :summary]
   DASHAPI_METHODS   = [:alerts, :snapshots, :stats, :data_series, :day_data_series]
   DEFAULT_ARG_VALS  = {:path => '/', :keys => 'n', :types => 'n', :since => YESTERDAY, 
@@ -27,14 +27,14 @@ class Chartbeat
 
     query = *args
     query_to_perform = {:apikey => @apikey, :host => @host}
-    DEFAULT_ARG_VALS.each do |k,v|
-      if query && query[k]
-        v = query[k]
-      end
-      query_to_perform[k] = v
-    end
-    prefix = DASHAPI_METHODS.include?(m) ? '/dashapi' : ''
-    data = Crack::JSON.parse(RestClient.get("http://" + BASE_URI + prefix + '/' + m.to_s + '/', :params => query_to_perform))
+    # DEFAULT_ARG_VALS.each do |k,v|
+    #   if query && query[k]
+    #     v = query[k]
+    #   end
+    #   query_to_perform[k] = v
+    # end
+    prefix = DASHAPI_METHODS.include?(m) ? '/dashapi' : '/live'
+    data = Crack::JSON.parse(RestClient.get("http://" + BASE_URI + prefix + '/' + m.to_s + '/v3/', :params => query_to_perform))
   end
     
 end
